@@ -33,13 +33,13 @@ public class PdfsearchApplication implements CommandLineRunner {
   }
 
   @Override
-  public void run(String... args) throws Exception {
+  public void run(String... args) {
     documentRepository.deleteAll();
     wordRepository.deleteAll();
 
     // save a couple of customers
-    documentRepository.save(new Document("Document3", "Author1"));
-    documentRepository.save(new Document("Document4", "Author2"));
+    documentRepository.save(new Document("Document3", "Author1", null));
+    documentRepository.save(new Document("Document4", "Author2", null));
     wordRepository.save(new Word("Word1", List.of()));
     wordRepository.save(new Word("Word2", List.of()));
 
