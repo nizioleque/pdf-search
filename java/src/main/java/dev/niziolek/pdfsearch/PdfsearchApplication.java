@@ -8,12 +8,16 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.File;
+import java.util.List;
 
 @SpringBootApplication
 public class PdfsearchApplication implements CommandLineRunner {
 
   @Autowired
   private DocumentRepository documentRepository;
+
+  @Autowired
+  private WordRepository wordRepository;
 
   public static void main(String[] args) {
     File pdfFile = new File("../pdfs/konstytucja.pdf");
@@ -31,10 +35,13 @@ public class PdfsearchApplication implements CommandLineRunner {
   @Override
   public void run(String... args) throws Exception {
     documentRepository.deleteAll();
+    wordRepository.deleteAll();
 
     // save a couple of customers
     documentRepository.save(new Document("Document3", "Author1"));
     documentRepository.save(new Document("Document4", "Author2"));
+    wordRepository.save(new Word("Word1", List.of()));
+    wordRepository.save(new Word("Word2", List.of()));
 
     // fetch all customers
     System.out.println("Customers found with findAll():");
@@ -42,11 +49,16 @@ public class PdfsearchApplication implements CommandLineRunner {
     for (Document document : documentRepository.findAll()) {
       System.out.println(document);
     }
+    for (Word word : wordRepository.findAll()) {
+      System.out.println(word);
+    }
     System.out.println();
 
     // fetch an individual customer
     System.out.println("Customer found with findByFirstName('Alice'):");
     System.out.println("--------------------------------");
     System.out.println(documentRepository.findByTitle("Document3"));
+    System.out.println(wordRepository.findByWord("Word2"));
+
   }
 }
