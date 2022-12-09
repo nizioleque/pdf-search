@@ -58,7 +58,7 @@ public class PdfsearchApplication implements CommandLineRunner {
     System.out.println("Customer found with findByFirstName('Alice'):");
     System.out.println("--------------------------------");
     System.out.println(documentRepository.findByTitle("Document3"));
-    System.out.println(wordRepository.findByWord("Word2"));
+    System.out.println(wordRepository.findByWord("WordDDD"));
 
   }
 }
