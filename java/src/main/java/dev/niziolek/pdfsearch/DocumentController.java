@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("api/document")
 @AllArgsConstructor
 public class DocumentController {
