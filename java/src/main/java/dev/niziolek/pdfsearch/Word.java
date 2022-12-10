@@ -2,7 +2,6 @@ package dev.niziolek.pdfsearch;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 
 import java.util.List;
@@ -11,7 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 public class Word {
   @Id
-  ObjectId id;
+  String id;
 
   String word;
   List<Posting> postings;

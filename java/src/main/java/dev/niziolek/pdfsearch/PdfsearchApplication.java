@@ -8,7 +8,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.File;
-import java.util.List;
 
 @SpringBootApplication
 public class PdfsearchApplication implements CommandLineRunner {
@@ -34,14 +33,14 @@ public class PdfsearchApplication implements CommandLineRunner {
 
   @Override
   public void run(String... args) {
-    documentRepository.deleteAll();
-    wordRepository.deleteAll();
-
-    // save a couple of customers
-    documentRepository.save(new Document("Document3", "Author1", null));
-    documentRepository.save(new Document("Document4", "Author2", null));
-    wordRepository.save(new Word("Word1", List.of()));
-    wordRepository.save(new Word("Word2", List.of()));
+//    documentRepository.deleteAll();
+//    wordRepository.deleteAll();
+//
+//    // save a couple of customers
+//    documentRepository.save(new Document("Document3", "Author1", null));
+//    documentRepository.save(new Document("Document4", "Author2", null));
+//    wordRepository.save(new Word("Word1", List.of()));
+//    wordRepository.save(new Word("Word2", List.of()));
 
     // fetch all customers
     System.out.println("Customers found with findAll():");
@@ -55,10 +54,10 @@ public class PdfsearchApplication implements CommandLineRunner {
     System.out.println();
 
     // fetch an individual customer
-    System.out.println("Customer found with findByFirstName('Alice'):");
-    System.out.println("--------------------------------");
-    System.out.println(documentRepository.findByTitle("Document3"));
-    System.out.println(wordRepository.findByWord("WordDDD"));
+//    System.out.println("Customer found with findByFirstName('Alice'):");
+//    System.out.println("--------------------------------");
+//    System.out.println(documentRepository.findByTitle("Document3"));
+//    System.out.println(wordRepository.findByWord("WordDDD"));
 
   }
 }
