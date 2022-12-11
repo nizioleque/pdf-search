@@ -14,6 +14,7 @@ import java.util.List;
 public class DocumentController {
 
   private final DocumentService documentService;
+  private final WordService wordService;
 
   @GetMapping
   public List<Document> fetchAllDocuments() {
@@ -26,12 +27,14 @@ public class DocumentController {
                             @RequestParam MultipartFile file
   ) throws IOException {
     Document document = documentService.addDocument(title, author, file);
+    wordService.recalculateIndex();
     return document.id.toString();
   }
 
   @DeleteMapping("/{id}")
   public boolean deleteDocument(@PathVariable String id) {
     documentService.deleteDocument(id);
+    wordService.recalculateIndex();
     return true;
   }
 

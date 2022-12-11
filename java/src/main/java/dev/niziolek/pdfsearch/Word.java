@@ -2,8 +2,10 @@ package dev.niziolek.pdfsearch;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Data
@@ -13,10 +15,16 @@ public class Word {
   String id;
 
   String word;
-  List<Posting> postings;
+  HashMap<ObjectId, List<Integer>> postings;
 
-  public Word(String word, List<Posting> postings) {
+  public Word(String word) {
     this.word = word;
-    this.postings = postings;
+    this.postings = new HashMap<>();
+  }
+
+  static String parse(String word) {
+    word = word.replaceAll("[^\\p{IsAlphabetic}\\p{IsDigit}]", "");
+    if (word.equals("")) return null;
+    return word.toLowerCase();
   }
 }
