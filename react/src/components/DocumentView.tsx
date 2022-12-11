@@ -1,4 +1,5 @@
 import { useGetDocumentsQuery } from '../api';
+import DocumentForm from './DocumentForm';
 
 function DocumentView() {
   const { data: documents } = useGetDocumentsQuery();
@@ -8,6 +9,7 @@ function DocumentView() {
   return (
     <>
       <h1>Documents:</h1>
+      <DocumentForm />
       {documents.map((document) => (
         <h4 key={document.id}>{JSON.stringify(document, null, 2)}</h4>
       ))}

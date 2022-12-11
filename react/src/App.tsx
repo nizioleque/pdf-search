@@ -1,7 +1,7 @@
 import { Container } from '@mui/material';
 import { ApiProvider } from '@reduxjs/toolkit/dist/query/react';
 import { api } from './api';
-import DocumentView from './views/DocumentView';
+import DocumentView from './components/DocumentView';
 
 function App() {
   return (
