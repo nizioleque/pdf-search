@@ -17,7 +17,18 @@ export const api = createApi({
       }),
       invalidatesTags: ['documents'],
     }),
+    deleteDocument: builder.mutation<boolean, string>({
+      query: (id) => ({
+        url: `document/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['documents'],
+    }),
   }),
 });
 
-export const { useGetDocumentsQuery, useAddDocumentMutation } = api;
+export const {
+  useGetDocumentsQuery,
+  useAddDocumentMutation,
+  useDeleteDocumentMutation,
+} = api;

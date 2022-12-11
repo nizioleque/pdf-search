@@ -1,8 +1,9 @@
-import { useGetDocumentsQuery } from '../api';
+import { useDeleteDocumentMutation, useGetDocumentsQuery } from '../api';
 import DocumentForm from './DocumentForm';
 
 function DocumentView() {
   const { data: documents } = useGetDocumentsQuery();
+  const [deleteDocument, {}] = useDeleteDocumentMutation();
 
   if (!documents) return <div>Loading...</div>;
 
@@ -11,7 +12,10 @@ function DocumentView() {
       <h1>Documents:</h1>
       <DocumentForm />
       {documents.map((document) => (
-        <h4 key={document.id}>{JSON.stringify(document, null, 2)}</h4>
+        <div>
+          <h4 key={document.id}>{JSON.stringify(document, null, 2)}</h4>
+          <button onClick={() => deleteDocument(document.id)}>Remove</button>
+        </div>
       ))}
     </>
   );

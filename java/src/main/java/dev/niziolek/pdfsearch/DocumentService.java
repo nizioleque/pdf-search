@@ -29,4 +29,8 @@ public class DocumentService {
     return documentRepository.insert(new Document(title, author, fileId));
   }
 
+  public void deleteDocument(String id) {
+    documentRepository.deleteById(id);
+  }
+
 }

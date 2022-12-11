@@ -29,4 +29,10 @@ public class DocumentController {
     return document.id.toString();
   }
 
+  @DeleteMapping("/{id}")
+  public boolean deleteDocument(@PathVariable String id) {
+    documentService.deleteDocument(id);
+    return true;
+  }
+
 }
