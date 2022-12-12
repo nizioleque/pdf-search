@@ -12,8 +12,8 @@ function DocumentView() {
       <h1>Documents:</h1>
       <DocumentForm />
       {documents.map((document) => (
-        <div>
-          <h4 key={document.id}>{JSON.stringify(document, null, 2)}</h4>
+        <div key={document.id}>
+          <h4>{JSON.stringify(document, null, 2)}</h4>
           <button onClick={() => deleteDocument(document.id)}>Remove</button>
         </div>
       ))}

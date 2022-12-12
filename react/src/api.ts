@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { Document } from './types';
+import { Document, Postings } from './types';
 
 export const api = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:8080/api/' }),
@@ -24,6 +24,10 @@ export const api = createApi({
       }),
       invalidatesTags: ['documents'],
     }),
+    getWord: builder.query<Postings, string>({
+      query: (word) => `word/${word}`,
+      providesTags: ['documents'],
+    }),
   }),
 });
 
@@ -31,4 +35,5 @@ export const {
   useGetDocumentsQuery,
   useAddDocumentMutation,
   useDeleteDocumentMutation,
+  useLazyGetWordQuery,
 } = api;

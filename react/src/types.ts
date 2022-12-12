@@ -4,13 +4,6 @@ export interface Document {
   author: string;
 }
 
-export interface Word {
-  id: string;
-  word: string;
-  postings: Posting[];
-}
-
-export interface Posting {
-  documentId: string;
-  pageNumbers: number[];
+export interface Postings {
+  [key: string]: number[];
 }

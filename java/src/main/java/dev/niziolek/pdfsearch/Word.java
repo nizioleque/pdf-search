@@ -2,7 +2,6 @@ package dev.niziolek.pdfsearch;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 
 import java.util.HashMap;
@@ -15,7 +14,7 @@ public class Word {
   String id;
 
   String word;
-  HashMap<ObjectId, List<Integer>> postings;
+  HashMap<String, List<Integer>> postings;
 
   public Word(String word) {
     this.word = word;
