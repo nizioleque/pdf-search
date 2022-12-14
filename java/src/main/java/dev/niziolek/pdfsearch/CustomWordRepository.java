@@ -1,7 +1,10 @@
 package dev.niziolek.pdfsearch;
 
-public interface CustomWordRepository {
-  boolean addOccurrence(String word, String documentId, int pageNumber);
+import java.util.HashMap;
+import java.util.List;
 
-  void removeDocument(String documentId);
+public interface CustomWordRepository {
+  void addDocumentIndex(String documentId, HashMap<String, List<Integer>> documentIndex);
+
+  void removeDocumentIndex(String documentId);
 }

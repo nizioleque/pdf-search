@@ -16,6 +16,9 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 @AllArgsConstructor
 @Service
@@ -41,18 +44,21 @@ public class IndexService {
       return;
     }
 
+    HashMap<String, List<Integer>> documentIndex = new HashMap<>();
+
     for (int i = 1; i <= pdfDocument.getNumberOfPages(); i++) {
       try {
         PDFTextStripper stripper = new PDFTextStripper();
         stripper.setStartPage(i);
         stripper.setEndPage(i);
         String text = stripper.getText(pdfDocument);
-        analyzePage(document.getId(), text, i);
+        analyzePage(document.getId(), text, i, documentIndex);
       } catch (IOException e) {
         System.out.println("Could not read PDF contents of document " + document.title + ", " + e.getMessage());
       }
     }
 
+    wordRepository.addDocumentIndex(document.id, documentIndex);
     documentService.updateDocumentState(document.id, DocumentStatus.ADDED);
 
     long endTime = System.nanoTime();
@@ -60,15 +66,17 @@ public class IndexService {
   }
 
   public void removeDocumentIndex(String id) {
-    wordRepository.removeDocument(id);
+    wordRepository.removeDocumentIndex(id);
   }
 
-  private void analyzePage(String documentId, String pageContent, int pageNumber) {
+  private void analyzePage(String documentId, String pageContent, int pageNumber, HashMap<String, List<Integer>> documentIndex) {
     String[] words = pageContent.split(" ");
     for (String word : words) {
       String parsedWord = Word.parse(word);
-      if (parsedWord != null) wordRepository.addOccurrence(parsedWord, documentId, pageNumber);
-
+      if (parsedWord != null) {
+        if (!documentIndex.containsKey(parsedWord)) documentIndex.put(parsedWord, new LinkedList<>());
+        documentIndex.get(parsedWord).add(pageNumber);
+      }
     }
   }
 
