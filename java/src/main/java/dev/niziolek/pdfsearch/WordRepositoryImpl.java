@@ -1,6 +1,7 @@
 package dev.niziolek.pdfsearch;
 
 import lombok.AllArgsConstructor;
+import org.springframework.data.mongodb.core.BulkOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -16,6 +17,8 @@ public class WordRepositoryImpl implements CustomWordRepository {
 
   @Override
   public void addDocumentIndex(String documentId, HashMap<String, List<Integer>> documentIndex) {
+    BulkOperations bulkOps = mongoTemplate.bulkOps(BulkOperations.BulkMode.UNORDERED, Word.class);
+
     for (Map.Entry<String, List<Integer>> wordEntry : documentIndex.entrySet()) {
       String word = wordEntry.getKey();
       List<Integer> occurrences = wordEntry.getValue();
@@ -28,8 +31,10 @@ public class WordRepositoryImpl implements CustomWordRepository {
 
       // add occurrences
       Update addOccurrence = new Update().set("occurrences." + documentId, occurrences);
-      mongoTemplate.updateFirst(queryWord, addOccurrence, Word.class);
+      bulkOps.updateOne(queryWord, addOccurrence);
     }
+
+    bulkOps.execute();
   }
 
   @Override
