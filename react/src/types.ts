@@ -4,6 +4,6 @@ export interface Document {
   author: string;
 }
 
-export interface Postings {
+export interface Occurrences {
   [key: string]: number[];
 }

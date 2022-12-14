@@ -14,11 +14,11 @@ public class Word {
   String id;
 
   String word;
-  HashMap<String, List<Integer>> postings;
+  HashMap<String, List<Integer>> occurrences;
 
   public Word(String word) {
     this.word = word;
-    this.postings = new HashMap<>();
+    this.occurrences = new HashMap<>();
   }
 
   static String parse(String word) {

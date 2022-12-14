@@ -15,16 +15,16 @@ public class WordRepositoryImpl implements CustomWordRepository {
   private final MongoTemplate mongoTemplate;
 
   @Override
-  public boolean addPosting(String word, String documentId, int pageNumber) {
+  public boolean addOccurrence(String word, String documentId, int pageNumber) {
     // add a word entry if it does not exist
     Query queryWord = new Query().addCriteria(Criteria.where("word").is(word));
     if (!mongoTemplate.exists(queryWord, Word.class)) {
       mongoTemplate.save(new Word(word));
     }
 
-    // add posting
-    Update addPosting = new Update().addToSet("postings." + documentId, pageNumber);
-    UpdateResult updateResult = mongoTemplate.updateFirst(queryWord, addPosting, Word.class);
+    // add occurrence
+    Update addOccurrence = new Update().addToSet("occurrences." + documentId, pageNumber);
+    UpdateResult updateResult = mongoTemplate.updateFirst(queryWord, addOccurrence, Word.class);
 
     return updateResult.getModifiedCount() == 1;
   }
@@ -32,11 +32,11 @@ public class WordRepositoryImpl implements CustomWordRepository {
   @Override
   public void removeDocument(String documentId) {
     // remove the document id field from all documents
-    Update removeDocumentField = new Update().unset("postings." + documentId);
+    Update removeDocumentField = new Update().unset("occurrences." + documentId);
     mongoTemplate.updateMulti(new Query(), removeDocumentField, Word.class);
 
     // remove words with empty document objects
-    Query emptyWords = new Query().addCriteria(Criteria.where("postings").is(new HashMap<String, List<Integer>>()));
+    Query emptyWords = new Query().addCriteria(Criteria.where("occurrences").is(new HashMap<String, List<Integer>>()));
     mongoTemplate.remove(emptyWords, Word.class);
   }
 

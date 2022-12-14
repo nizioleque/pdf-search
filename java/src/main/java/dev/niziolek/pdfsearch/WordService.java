@@ -15,67 +15,63 @@ import java.util.stream.Stream;
 public class WordService {
   private final WordRepository wordRepository;
 
-  public Map<String, List<Integer>> getPostingsByWord(String query) {
+  public Map<String, List<Integer>> getOccurrencesByWord(String query) {
     String[] queryWords = query.split(" ");
 
-    System.out.println(queryWords);
-    Map<String, List<Integer>> resultPostings = new HashMap<>();
+    Map<String, List<Integer>> resultOccurrences = new HashMap<>();
 
     for (int i = 0; i < queryWords.length; i++) {
       boolean first = i == 0;
       boolean last = i == queryWords.length - 1;
 
-      Map<String, List<Integer>> currentPostings;
+      Map<String, List<Integer>> currentOccurrences;
 
       if (last) {
-        currentPostings = getLastWordPostings(queryWords[i]);
+        currentOccurrences = getLastWordOccurrences(queryWords[i]);
       } else {
         Optional<Word> result = wordRepository.findByWord(queryWords[i]);
         if (result.isEmpty()) continue;
-        currentPostings = result.get().getPostings();
+        currentOccurrences = result.get().getOccurrences();
       }
 
       if (first) {
-        resultPostings.putAll(currentPostings);
+        resultOccurrences.putAll(currentOccurrences);
         continue;
       }
 
-      for (String resultKey : resultPostings.keySet()) {
-        if (currentPostings.containsKey(resultKey)) {
-          // remove array entries that do not exist in currentPostings
-          resultPostings.put(
+      for (String resultKey : resultOccurrences.keySet()) {
+        if (currentOccurrences.containsKey(resultKey)) {
+          // remove array entries that do not exist in currentOccurrences
+          resultOccurrences.put(
                   resultKey,
-                  currentPostings
+                  currentOccurrences
                           .get(resultKey)
                           .stream()
-                          .filter(resultPostings.get(resultKey)::contains)
+                          .filter(resultOccurrences.get(resultKey)::contains)
                           .collect(Collectors.toList()));
         } else {
-          // remove key from result postings
-          resultPostings.remove(resultKey);
+          // remove key from result occurrences
+          resultOccurrences.remove(resultKey);
         }
-
-        System.out.println(currentPostings);
-        System.out.println(resultPostings);
       }
     }
 
-    return resultPostings;
+    return resultOccurrences;
   }
 
-  private Map<String, List<Integer>> getLastWordPostings(String lastWord) {
+  private Map<String, List<Integer>> getLastWordOccurrences(String lastWord) {
     List<Word> words = wordRepository.findByWordStartsWith(lastWord);
-    HashMap<String, List<Integer>> postings = new HashMap<>();
+    HashMap<String, List<Integer>> occurrences = new HashMap<>();
 
     for (Word word : words) {
-      for (Map.Entry<String, List<Integer>> wordEntry : word.getPostings().entrySet()) {
-        if (!postings.containsKey(wordEntry.getKey())) {
-          postings.put(wordEntry.getKey(), wordEntry.getValue());
+      for (Map.Entry<String, List<Integer>> wordEntry : word.getOccurrences().entrySet()) {
+        if (!occurrences.containsKey(wordEntry.getKey())) {
+          occurrences.put(wordEntry.getKey(), wordEntry.getValue());
         } else {
-          postings.put(
+          occurrences.put(
                   wordEntry.getKey(),
                   Stream.concat(
-                                  postings.get(wordEntry.getKey()).stream(),
+                                  occurrences.get(wordEntry.getKey()).stream(),
                                   wordEntry.getValue().stream()
                           )
                           .distinct()
@@ -84,6 +80,6 @@ public class WordService {
         }
       }
     }
-    return postings;
+    return occurrences;
   }
 }

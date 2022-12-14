@@ -67,7 +67,7 @@ public class IndexService {
     String[] words = pageContent.split(" ");
     for (String word : words) {
       String parsedWord = Word.parse(word);
-      if (parsedWord != null) wordRepository.addPosting(parsedWord, documentId, pageNumber);
+      if (parsedWord != null) wordRepository.addOccurrence(parsedWord, documentId, pageNumber);
 
     }
   }
