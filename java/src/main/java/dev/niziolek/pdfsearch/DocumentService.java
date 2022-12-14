@@ -26,14 +26,21 @@ public class DocumentService {
   public Document addDocument(String title, String author, MultipartFile file) throws IOException {
     ObjectId fileId = gridFsTemplate.store(
             file.getInputStream(), file.getName(), file.getContentType());
-    return documentRepository.save(new Document(title, author, fileId));
+    return documentRepository.save(new Document(title, author, fileId, DocumentStatus.ADDING));
   }
 
   public void deleteDocument(String id) {
     Optional<Document> document = documentRepository.findById(id);
-    if (document.isEmpty()) return;
+    if (document.isEmpty() || document.get().status == DocumentStatus.ADDING) return;
     gridFsTemplate.delete(new Query().addCriteria(Criteria.where("_id").is(document.get().content)));
     documentRepository.deleteById(id);
   }
 
+  public void updateDocumentState(String id, DocumentStatus newStatus) {
+    Optional<Document> queryResult = documentRepository.findById(id);
+    if (queryResult.isEmpty()) return;
+    Document document = queryResult.get();
+    document.setStatus(newStatus);
+    documentRepository.save(document);
+  }
 }

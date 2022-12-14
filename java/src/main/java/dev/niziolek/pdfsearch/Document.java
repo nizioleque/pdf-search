@@ -15,12 +15,15 @@ public class Document {
   String title;
   String author;
 
+  DocumentStatus status;
+
   @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
   ObjectId content;
 
-  public Document(String title, String author, ObjectId content) {
+  public Document(String title, String author, ObjectId content, DocumentStatus status) {
     this.title = title;
     this.author = author;
     this.content = content;
+    this.status = status;
   }
 }

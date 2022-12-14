@@ -12,6 +12,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsResource;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -20,9 +21,11 @@ import java.io.IOException;
 @Service
 public class IndexService {
   private final WordRepository wordRepository;
+  private final DocumentService documentService;
   private final GridFsTemplate gridFsTemplate;
   private final MongoDatabaseFactory mongoDatabaseFactory;
 
+  @Async
   public void indexDocument(Document document) {
     System.out.println("Adding document \"" + document.title + "\"");
     long startTime = System.nanoTime();
@@ -49,6 +52,8 @@ public class IndexService {
         System.out.println("Could not read PDF contents of document " + document.title + ", " + e.getMessage());
       }
     }
+
+    documentService.updateDocumentState(document.id, DocumentStatus.ADDED);
 
     long endTime = System.nanoTime();
     System.out.println("Finished adding document \"" + document.title + "\"!, time: " + (endTime - startTime) / 1000000000 + " s");
