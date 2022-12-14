@@ -16,12 +16,12 @@ public class WordRepositoryImpl implements CustomWordRepository {
   private final MongoTemplate mongoTemplate;
 
   @Override
-  public void addDocumentIndex(String documentId, HashMap<String, List<Integer>> documentIndex) {
+  public void addDocumentIndex(String documentId, Map<String, Map<Integer, List<Integer>>> documentIndex) {
     BulkOperations bulkOps = mongoTemplate.bulkOps(BulkOperations.BulkMode.UNORDERED, Word.class);
 
-    for (Map.Entry<String, List<Integer>> wordEntry : documentIndex.entrySet()) {
+    for (Map.Entry<String, Map<Integer, List<Integer>>> wordEntry : documentIndex.entrySet()) {
       String word = wordEntry.getKey();
-      List<Integer> occurrences = wordEntry.getValue();
+      Map<Integer, List<Integer>> occurrences = wordEntry.getValue();
 
       // add a word entry if it does not exist
       Query queryWord = new Query().addCriteria(Criteria.where("word").is(word));

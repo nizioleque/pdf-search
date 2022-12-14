@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 @AllArgsConstructor
 @Service
@@ -44,7 +45,7 @@ public class IndexService {
       return;
     }
 
-    HashMap<String, List<Integer>> documentIndex = new HashMap<>();
+    Map<String, Map<Integer, List<Integer>>> documentIndex = new HashMap<>();
 
     for (int i = 1; i <= pdfDocument.getNumberOfPages(); i++) {
       try {
@@ -69,14 +70,21 @@ public class IndexService {
     wordRepository.removeDocumentIndex(id);
   }
 
-  private void analyzePage(String documentId, String pageContent, int pageNumber, HashMap<String, List<Integer>> documentIndex) {
+  private void analyzePage(String documentId, String pageContent, int pageNumber, Map<String, Map<Integer, List<Integer>>> documentIndex) {
     String[] words = pageContent.split(" ");
+    int wordIndex = 0;
     for (String word : words) {
       String parsedWord = Word.parse(word);
+
       if (parsedWord != null) {
-        if (!documentIndex.containsKey(parsedWord)) documentIndex.put(parsedWord, new LinkedList<>());
-        documentIndex.get(parsedWord).add(pageNumber);
+        if (!documentIndex.containsKey(parsedWord)) documentIndex.put(parsedWord, new HashMap<>());
+        if (!documentIndex.get(parsedWord).containsKey(pageNumber))
+          documentIndex.get(parsedWord).put(pageNumber, new LinkedList<>());
+
+        documentIndex.get(parsedWord).get(pageNumber).add(wordIndex);
+        wordIndex++;
       }
+
     }
   }
 

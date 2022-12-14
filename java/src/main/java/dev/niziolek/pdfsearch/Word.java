@@ -6,6 +6,7 @@ import org.springframework.data.annotation.Id;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Data
 @NoArgsConstructor
@@ -14,7 +15,7 @@ public class Word {
   String id;
 
   String word;
-  HashMap<String, List<Integer>> occurrences;
+  Map<String, Map<Integer, List<Integer>>> occurrences;
 
   public Word(String word) {
     this.word = word;

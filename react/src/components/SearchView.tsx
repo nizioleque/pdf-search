@@ -20,7 +20,7 @@ function SearchView() {
                   2
                 )}
               </h4>
-              <p>{value.join(', ')}</p>
+              <p>{JSON.stringify(value, null, 2)}</p>
             </div>
           ))}
         </>

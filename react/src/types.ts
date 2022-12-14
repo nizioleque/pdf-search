@@ -5,5 +5,5 @@ export interface Document {
 }
 
 export interface Occurrences {
-  [key: string]: number[];
+  [key: string]: { [key: number]: number[] };
 }
