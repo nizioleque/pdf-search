@@ -27,14 +27,14 @@ public class DocumentController {
                             @RequestParam MultipartFile file
   ) throws IOException {
     Document document = documentService.addDocument(title, author, file);
-    indexService.recalculateIndex();
-    return document.id.toString();
+    indexService.indexDocument(document);
+    return document.id;
   }
 
   @DeleteMapping("/{id}")
   public boolean deleteDocument(@PathVariable String id) {
     documentService.deleteDocument(id);
-    indexService.recalculateIndex();
+    indexService.removeDocumentIndex(id);
     return true;
   }
 

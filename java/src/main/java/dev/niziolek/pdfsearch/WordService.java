@@ -13,11 +13,15 @@ import java.util.Optional;
 public class WordService {
   private final WordRepository wordRepository;
 
-  public Map<String, List<Integer>> getWord(String word) {
+  public Map<String, List<Integer>> getPostingsByWord(String word) {
     Optional<Word> result = wordRepository.findByWord(word);
     if (result.isPresent()) {
       return result.get().getPostings();
     }
     return new HashMap<>();
+  }
+
+  public boolean addPosting(String word, String documentId, int pageNumber) {
+    return wordRepository.addPosting(word, documentId, pageNumber);
   }
 }

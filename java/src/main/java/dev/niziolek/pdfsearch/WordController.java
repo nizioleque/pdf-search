@@ -15,6 +15,6 @@ public class WordController {
 
   @GetMapping("/{word}")
   public Map<String, List<Integer>> fetchWord(@PathVariable String word) {
-    return wordService.getWord(word);
+    return wordService.getPostingsByWord(word);
   }
 }
