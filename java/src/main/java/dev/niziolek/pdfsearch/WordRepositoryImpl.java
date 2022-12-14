@@ -22,17 +22,8 @@ public class WordRepositoryImpl implements CustomWordRepository {
       mongoTemplate.save(new Word(word));
     }
 
-    // add a document entry if it does not exist
-    Query queryPosting = new Query()
-            .addCriteria(Criteria.where("word").is(word))
-            .addCriteria(Criteria.where("postings." + documentId).exists(false));
-    if (mongoTemplate.exists(queryPosting, Word.class)) {
-      Update addDocumentEntry = new Update().set("postings." + documentId, List.of());
-      mongoTemplate.updateFirst(queryPosting, addDocumentEntry, Word.class);
-    }
-
     // add posting
-    Update addPosting = new Update().push("postings." + documentId, pageNumber);
+    Update addPosting = new Update().addToSet("postings." + documentId, pageNumber);
     UpdateResult updateResult = mongoTemplate.updateFirst(queryWord, addPosting, Word.class);
 
     return updateResult.getModifiedCount() == 1;
