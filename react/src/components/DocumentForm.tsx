@@ -1,3 +1,4 @@
+import { Button, Card, TextField, Typography } from '@mui/material';
 import { FormEvent, useState } from 'react';
 import { useAddDocumentMutation } from '../api';
 
@@ -15,47 +16,37 @@ function DocumentForm() {
     formData.append('title', title);
     formData.append('author', author);
     formData.append('file', file);
-    // console.log(...formData);
-    // for (var [key, value] of formData.entries()) {
-    //   console.log(key, value);
-    // }
     addDocument(formData);
   };
 
   return (
-    <>
-      <h2>Add document:</h2>
+    <Card variant='outlined'>
+      <Typography variant='h3'>Add document</Typography>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>Title</label>
+        <TextField
+          label='Title'
+          value={title}
+          onChange={(event) => setTitle(event.target.value)}
+        />
+        <TextField
+          label='Author'
+          value={author}
+          onChange={(event) => setAuthor(event.target.value)}
+        />
+        <Button variant='contained' component='label'>
+          Upload
           <input
-            type='text'
-            value={title}
-            onChange={(event) => setTitle(event.target.value)}
-          />
-        </div>
-        <div>
-          <label>Author</label>
-
-          <input
-            type='text'
-            value={author}
-            onChange={(event) => setAuthor(event.target.value)}
-          />
-        </div>
-        <div>
-          <label>File</label>
-          <input
+            hidden
             type='file'
             accept='.pdf'
             onChange={(event) =>
               event.target.files?.[0] && setFile(event.target.files[0])
             }
           />
-        </div>
-        <input type='submit' value='Add' />
+        </Button>
+        <Button type='submit'>Add</Button>
       </form>
-    </>
+    </Card>
   );
 }
 

@@ -1,3 +1,4 @@
+import { Box, Button, Card, Typography } from '@mui/material';
 import { useDeleteDocumentMutation, useGetDocumentsQuery } from '../api';
 import DocumentForm from './DocumentForm';
 
@@ -8,16 +9,31 @@ function DocumentView() {
   if (!documents) return <div>Loading...</div>;
 
   return (
-    <>
-      <h1>Documents:</h1>
-      <DocumentForm />
-      {documents.map((document) => (
-        <div key={document.id}>
-          <h4>{JSON.stringify(document, null, 2)}</h4>
-          <button onClick={() => deleteDocument(document.id)}>Remove</button>
-        </div>
-      ))}
-    </>
+    <Box
+      sx={(theme) => ({
+        borderRight: '2px solid',
+        borderColor: theme.palette.primary.main,
+      })}
+    >
+      <Typography
+        variant='h2'
+        sx={(theme) => ({ backgroundColor: theme.palette.primary.main })}
+      >
+        Documents
+      </Typography>
+      <Box p={2}>
+        <DocumentForm />
+        {documents.map((document) => (
+          <Card variant='outlined' key={document.id}>
+            <Typography variant='h4'>{document.title}</Typography>
+            {document.author.length > 0 && (
+              <Typography>by {document.author}</Typography>
+            )}
+            <Button onClick={() => deleteDocument(document.id)}>Remove</Button>
+          </Card>
+        ))}
+      </Box>
+    </Box>
   );
 }
 
