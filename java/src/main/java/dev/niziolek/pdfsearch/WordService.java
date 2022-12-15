@@ -3,80 +3,110 @@ package dev.niziolek.pdfsearch;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
 @AllArgsConstructor
 @Service
 public class WordService {
   private final WordRepository wordRepository;
 
-  public Map<String, List<Integer>> getOccurrencesByWord(String query) {
+  public List<SearchResult> getOccurrencesByWord(String query) {
     String[] queryWords = query.split(" ");
+    List<SearchResult> potentialResults = new ArrayList<>();
 
-    Map<String, List<Integer>> resultOccurrences = new HashMap<>();
+    if (queryWords.length < 1) return List.of();
 
-//    for (int i = 0; i < queryWords.length; i++) {
-//      boolean first = i == 0;
-//      boolean last = i == queryWords.length - 1;
-//
-//      Map<String, List<Integer>> currentOccurrences;
-//
-//      if (last) {
-//        currentOccurrences = getLastWordOccurrences(queryWords[i]);
-//      } else {
-//        Optional<Word> result = wordRepository.findByWord(queryWords[i]);
-//        if (result.isEmpty()) continue;
-//        currentOccurrences = result.get().getOccurrences();
-//      }
-//
-//      if (first) {
-//        resultOccurrences.putAll(currentOccurrences);
-//        continue;
-//      }
-//
-//      for (String resultKey : resultOccurrences.keySet()) {
-//        if (currentOccurrences.containsKey(resultKey)) {
-//          // remove array entries that do not exist in currentOccurrences
-//          resultOccurrences.put(
-//                  resultKey,
-//                  currentOccurrences
-//                          .get(resultKey)
-//                          .stream()
-//                          .filter(resultOccurrences.get(resultKey)::contains)
-//                          .collect(Collectors.toList()));
-//        } else {
-//          // remove key from result occurrences
-//          resultOccurrences.remove(resultKey);
-//        }
-//      }
-//    }
+    // special case for one word
+    if (queryWords.length == 1) {
+      List<Word> firstWords = wordRepository.findByWordStartsWith(queryWords[0]);
 
-    return resultOccurrences;
+      for (Word firstWord : firstWords) {
+        var firstWordOccurrences = firstWord.getOccurrences();
+        for (var documentOccurrences : firstWordOccurrences.entrySet()) {
+          for (var pageOccurrences : documentOccurrences.getValue().entrySet()) {
+            for (int pageOccurrence : pageOccurrences.getValue()) {
+              String documentId = documentOccurrences.getKey();
+              int pageNumber = pageOccurrences.getKey();
+              SearchResult searchResult = new SearchResult(documentId, pageNumber, pageOccurrence, firstWord.getWord());
+              potentialResults.add(searchResult);
+            }
+          }
+        }
+      }
+      
+      return potentialResults;
+    }
+
+    // add all first word occurrences as potential search results
+    Optional<Word> firstWordResult = wordRepository.findByWord(queryWords[0]);
+    if (firstWordResult.isEmpty()) return List.of();
+    var firstWordOccurrences = firstWordResult.get().getOccurrences();
+    for (var documentOccurrences : firstWordOccurrences.entrySet()) {
+      for (var pageOccurrences : documentOccurrences.getValue().entrySet()) {
+        for (int pageOccurrence : pageOccurrences.getValue()) {
+          String documentId = documentOccurrences.getKey();
+          int pageNumber = pageOccurrences.getKey();
+          SearchResult searchResult = new SearchResult(documentId, pageNumber, pageOccurrence, null);
+          potentialResults.add(searchResult);
+        }
+      }
+    }
+
+    // filter solutions
+    for (int i = 1; i < queryWords.length - 1; i++) {
+      Optional<Word> result = wordRepository.findByWord(queryWords[i]);
+      if (result.isEmpty()) {
+        potentialResults.clear();
+        break;
+      }
+
+      var currentOccurrences = result.get().getOccurrences();
+
+      for (Iterator<SearchResult> itr = potentialResults.iterator(); itr.hasNext(); ) {
+        SearchResult potentialResult = itr.next();
+        boolean remove = false;
+
+        var documentOccurrences = currentOccurrences.get(potentialResult.documentId);
+        if (documentOccurrences == null) remove = true;
+
+        if (!remove) {
+          List<Integer> pageOccurrences = documentOccurrences.get(potentialResult.pageNumber);
+          if (pageOccurrences == null || !pageOccurrences.contains(potentialResult.firstWordIndex + i)) remove = true;
+        }
+
+        if (remove) {
+          itr.remove();
+        }
+      }
+    }
+
+    // last word
+    List<Word> lastWords = wordRepository.findByWordStartsWith(queryWords[queryWords.length - 1]);
+    for (Iterator<SearchResult> itr = potentialResults.iterator(); itr.hasNext(); ) {
+      SearchResult potentialResult = itr.next();
+      boolean remove = true;
+
+      for (Word lastWord : lastWords) {
+        var documentOccurrences = lastWord.getOccurrences().get(potentialResult.documentId);
+        if (documentOccurrences == null) continue;
+
+        List<Integer> pageOccurrences = documentOccurrences.get(potentialResult.pageNumber);
+        if (pageOccurrences == null) continue;
+
+        if (pageOccurrences.contains(potentialResult.firstWordIndex + queryWords.length - 1)) {
+          potentialResult.lastWord = lastWord.getWord();
+          remove = false;
+        }
+      }
+
+      if (remove) {
+        itr.remove();
+      }
+    }
+
+    return potentialResults;
   }
-
-//  private Map<String, List<Integer>> getLastWordOccurrences(String lastWord) {
-//    List<Word> words = wordRepository.findByWordStartsWith(lastWord);
-//    HashMap<String, List<Integer>> occurrences = new HashMap<>();
-//
-//    for (Word word : words) {
-//      for (Map.Entry<String, List<Integer>> wordEntry : word.getOccurrences().entrySet()) {
-//        if (!occurrences.containsKey(wordEntry.getKey())) {
-//          occurrences.put(wordEntry.getKey(), wordEntry.getValue());
-//        } else {
-//          occurrences.put(
-//                  wordEntry.getKey(),
-//                  Stream.concat(
-//                                  occurrences.get(wordEntry.getKey()).stream(),
-//                                  wordEntry.getValue().stream()
-//                          )
-//                          .distinct()
-//                          .sorted()
-//                          .toList());
-//        }
-//      }
-//    }
-//    return occurrences;
-//  }
 }
