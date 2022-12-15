@@ -16,8 +16,15 @@ function SearchView() {
   }, [searchQuery]);
 
   return (
-    <Box>
+    <Box
+      sx={{
+        margin: '0 auto',
+      }}
+    >
       <TextField
+        sx={{
+          width: 500,
+        }}
         onChange={(event) => setSearchQuery(event.target.value)}
         placeholder='Search'
         InputProps={{

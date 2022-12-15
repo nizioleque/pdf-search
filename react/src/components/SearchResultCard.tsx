@@ -1,4 +1,4 @@
-import { Card, Typography } from '@mui/material';
+import { Box, Card, Typography } from '@mui/material';
 import { useGetDocumentsQuery } from '../api';
 import { SearchResult } from '../types';
 
@@ -19,12 +19,19 @@ function SearchResultCard({ searchResult, searchQuery }: SearchResultProps) {
   return (
     <Card
       key={`${searchResult.documentId}+${searchResult.pageNumber}+${searchResult.firstWordIndex}`}
+      variant='outlined'
     >
-      <Typography variant='h5'>{`${thisDocument.title}${
-        thisDocument.author.length > 0 && ` by ${thisDocument.author}`
-      }, page ${searchResult.pageNumber}, from word ${
-        searchResult.firstWordIndex + 1
-      }`}</Typography>
+      <Typography fontSize='1.2rem'>
+        <Box component='span' fontWeight={700}>
+          {thisDocument.title}
+        </Box>
+        {`${thisDocument.author.length > 0 && ` by ${thisDocument.author}`}`}
+      </Typography>
+      <Typography fontSize='0.9rem'>
+        {`page ${searchResult.pageNumber}, from word ${
+          searchResult.firstWordIndex + 1
+        }`}
+      </Typography>
       <Typography>{`...${queryText} ${searchResult.lastWord}...`}</Typography>
     </Card>
   );

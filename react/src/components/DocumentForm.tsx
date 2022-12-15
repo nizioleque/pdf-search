@@ -1,4 +1,5 @@
-import { Button, Card, TextField, Typography } from '@mui/material';
+import { Add, InsertDriveFile } from '@mui/icons-material';
+import { Box, Button, Card, TextField, Typography } from '@mui/material';
 import { FormEvent, useState } from 'react';
 import { useAddDocumentMutation } from '../api';
 
@@ -17,36 +18,89 @@ function DocumentForm() {
     formData.append('author', author);
     formData.append('file', file);
     addDocument(formData);
+    setTitle('');
+    setAuthor('');
+    setFile(null);
   };
 
   return (
-    <Card variant='outlined'>
-      <Typography variant='h3'>Add document</Typography>
-      <form onSubmit={handleSubmit}>
-        <TextField
-          label='Title'
-          value={title}
-          onChange={(event) => setTitle(event.target.value)}
-        />
-        <TextField
-          label='Author'
-          value={author}
-          onChange={(event) => setAuthor(event.target.value)}
-        />
-        <Button variant='contained' component='label'>
-          Upload
-          <input
-            hidden
-            type='file'
-            accept='.pdf'
-            onChange={(event) =>
-              event.target.files?.[0] && setFile(event.target.files[0])
-            }
+    <form onSubmit={handleSubmit}>
+      <Card
+        variant='outlined'
+        sx={{
+          p: 1,
+          '& > *': {
+            m: 1,
+          },
+        }}
+      >
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
+          <Typography
+            sx={{
+              textAlign: 'center',
+              fontSize: '1.3rem',
+            }}
+          >
+            Add document
+          </Typography>
+          <Button type='submit' variant='contained' startIcon={<Add />}>
+            Add
+          </Button>
+        </Box>
+        <Box>
+          <TextField
+            label='Title'
+            value={title}
+            onChange={(event) => setTitle(event.target.value)}
+            fullWidth
+            variant='standard'
           />
-        </Button>
-        <Button type='submit'>Add</Button>
-      </form>
-    </Card>
+        </Box>
+        <Box>
+          <TextField
+            label='Author'
+            value={author}
+            onChange={(event) => setAuthor(event.target.value)}
+            fullWidth
+            variant='standard'
+          />
+        </Box>
+        <Box
+          sx={{
+            mt: 2,
+            display: 'flex',
+            alignItems: 'center',
+            gap: 2,
+          }}
+        >
+          <Button
+            sx={{ flexShrink: 0 }}
+            variant='outlined'
+            component='label'
+            startIcon={<InsertDriveFile />}
+          >
+            Select file
+            <input
+              hidden
+              type='file'
+              accept='.pdf'
+              onChange={(event) =>
+                event.target.files?.[0] && setFile(event.target.files[0])
+              }
+            />
+          </Button>
+          <Typography fontStyle='italic'>
+            {file?.name ?? 'No file selected'}
+          </Typography>
+        </Box>
+      </Card>
+    </form>
   );
 }
 

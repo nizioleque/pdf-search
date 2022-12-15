@@ -12,54 +12,75 @@ function DocumentView() {
   if (!documents) return <div>Loading...</div>;
 
   return (
-    <Box
-      sx={(theme) => ({
-        borderRight: '2px solid',
-        borderColor: theme.palette.primary.main,
-      })}
+    <Card
+      sx={{
+        height: '100%',
+        px: 2,
+      }}
+      square
+      elevation={8}
     >
       <Typography
-        variant='h2'
-        sx={(theme) => ({ backgroundColor: theme.palette.primary.main })}
+        sx={(theme) => ({
+          color: theme.palette.primary.main,
+          textAlign: 'center',
+          fontSize: '1.7rem',
+          fontWeight: 700,
+          py: 1,
+        })}
       >
         Documents
       </Typography>
-      <Box p={2}>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 2,
+        }}
+      >
         <DocumentForm />
-        {documents.map((document) => (
-          <Card
-            variant='outlined'
-            key={document.id}
-            sx={{
-              display: 'grid',
-            }}
-          >
-            <Box sx={{ gridRow: 1, gridColumn: 1 }}>
-              <Typography variant='h4'>{document.title}</Typography>
-              {document.author.length > 0 && (
-                <Typography>by {document.author}</Typography>
-              )}
-              <Button onClick={() => deleteDocument(document.id)}>
-                Remove
-              </Button>
-            </Box>
-            {document.status === DocumentStatus.ADDING && (
-              <Box
-                sx={{
-                  gridRow: 1,
-                  gridColumn: 1,
-                  zIndex: 1,
-                  background: 'rgb(255, 255, 255, 0.85)',
-                }}
-              >
-                <CircularProgress />
-                <Typography>Adding...</Typography>
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            gap: 2,
+          }}
+        >
+          {documents.map((document) => (
+            <Card
+              variant='outlined'
+              key={document.id}
+              sx={{
+                display: 'grid',
+              }}
+            >
+              <Box sx={{ gridRow: 1, gridColumn: 1 }}>
+                <Typography>{document.title}</Typography>
+                {document.author.length > 0 && (
+                  <Typography>by {document.author}</Typography>
+                )}
+                <Button onClick={() => deleteDocument(document.id)}>
+                  Remove
+                </Button>
               </Box>
-            )}
-          </Card>
-        ))}
+              {document.status === DocumentStatus.ADDING && (
+                <Box
+                  sx={{
+                    gridRow: 1,
+                    gridColumn: 1,
+                    zIndex: 1,
+                    background: 'rgb(255, 255, 255, 0.85)',
+                  }}
+                >
+                  <CircularProgress />
+                  <Typography>Adding...</Typography>
+                </Box>
+              )}
+            </Card>
+          ))}
+        </Box>
       </Box>
-    </Box>
+    </Card>
   );
 }
 
