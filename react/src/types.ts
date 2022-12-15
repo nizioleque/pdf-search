@@ -4,6 +4,9 @@ export interface Document {
   author: string;
 }
 
-export interface Occurrences {
-  [key: string]: { [key: number]: number[] };
+export interface SearchResult {
+  documentId: string;
+  pageNumber: number;
+  firstWordIndex: number;
+  lastWord: string;
 }

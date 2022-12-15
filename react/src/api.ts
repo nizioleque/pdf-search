@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { Document, Occurrences } from './types';
+import { Document, SearchResult } from './types';
 
 export const api = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:8080/api/' }),
@@ -24,7 +24,7 @@ export const api = createApi({
       }),
       invalidatesTags: ['documents'],
     }),
-    getWord: builder.query<Occurrences, string>({
+    getWord: builder.query<SearchResult[], string>({
       query: (word) => `word/${word}`,
       providesTags: ['documents'],
     }),
