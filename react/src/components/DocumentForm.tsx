@@ -90,6 +90,7 @@ function DocumentForm() {
               hidden
               type='file'
               accept='.pdf'
+              value={''}
               onChange={(event) =>
                 event.target.files?.[0] && setFile(event.target.files[0])
               }

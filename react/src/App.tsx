@@ -17,7 +17,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <ApiProvider api={api}>
         <CssBaseline />
-        <Box sx={{ display: 'grid', grid: 'auto / 1fr 500px', height: '100%' }}>
+        <Box sx={{ display: 'grid', grid: 'auto / 1fr 520px', height: '100%' }}>
           <SearchView />
           <DocumentView />
         </Box>
