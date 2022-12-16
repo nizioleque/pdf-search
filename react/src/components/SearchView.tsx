@@ -41,7 +41,7 @@ function SearchView() {
             }}
             fullWidth
             onChange={(event) => setSearchQuery(event.target.value)}
-            placeholder='Search'
+            placeholder='Search...'
             InputProps={{
               startAdornment: (
                 <InputAdornment position='start'>
@@ -60,6 +60,7 @@ function SearchView() {
                 mt: 4,
               }}
               severity='info'
+              variant='outlined'
             >
               No results
             </Alert>

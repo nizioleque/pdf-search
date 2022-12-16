@@ -16,21 +16,24 @@ function DocumentView() {
         height: '100%',
         px: 2,
         overflow: 'auto',
+        backgroundColor: '#f8f8f8',
       }}
       square
       elevation={5}
     >
-      <Typography
+      <Card
+        variant='outlined'
         sx={(theme) => ({
           color: theme.palette.primary.main,
           textAlign: 'center',
-          fontSize: '1.7rem',
+          fontSize: '1.5rem',
           fontWeight: 500,
-          py: 1,
+          py: 0.5,
+          my: 2,
         })}
       >
         Documents
-      </Typography>
+      </Card>
       <Box
         sx={{
           display: 'flex',

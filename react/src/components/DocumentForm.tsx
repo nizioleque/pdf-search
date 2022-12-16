@@ -73,7 +73,7 @@ function DocumentForm() {
         </Box>
         <Box
           sx={{
-            mt: 2,
+            mt: 3,
             display: 'flex',
             alignItems: 'center',
             gap: 2,

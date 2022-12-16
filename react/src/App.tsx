@@ -10,6 +10,9 @@ const theme = createTheme({
       main: '#0039cb',
     },
   },
+  shape: {
+    borderRadius: 15,
+  },
 });
 
 function App() {
@@ -17,7 +20,14 @@ function App() {
     <ThemeProvider theme={theme}>
       <ApiProvider api={api}>
         <CssBaseline />
-        <Box sx={{ display: 'grid', grid: 'auto / 1fr 520px', height: '100%' }}>
+        <Box
+          sx={{
+            display: 'grid',
+            grid: 'auto / 1fr 520px',
+            height: '100%',
+            backgroundColor: '#f8f8f8',
+          }}
+        >
           <SearchView />
           <DocumentView />
         </Box>
