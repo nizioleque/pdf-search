@@ -2,6 +2,7 @@ import { Search } from '@mui/icons-material';
 import { Box, Card, InputAdornment, TextField } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useGetDocumentsQuery, useLazyGetWordQuery } from '../api';
+import useDebounce from '../useDebounce';
 import SearchResultCard from './SearchResultCard';
 
 function SearchView() {
@@ -9,11 +10,12 @@ function SearchView() {
   const [getWord, { data: searchResults }] = useLazyGetWordQuery();
   const [showResult, setShowResults] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const debouncedSearchQuery = useDebounce<string>(searchQuery, 500);
 
   useEffect(() => {
-    setShowResults(searchQuery.length > 0);
-    if (searchQuery.length > 0) getWord(searchQuery);
-  }, [searchQuery]);
+    setShowResults(debouncedSearchQuery.length > 0);
+    if (debouncedSearchQuery.length > 0) getWord(debouncedSearchQuery);
+  }, [debouncedSearchQuery]);
 
   return (
     <Box

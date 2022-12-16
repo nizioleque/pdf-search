@@ -14,7 +14,6 @@ function SearchResultCard({ searchResult, searchQuery }: SearchResultProps) {
   )[0]!;
 
   const queryText = searchQuery.trim().split(' ').slice(0, -1).join(' ');
-  console.log(searchQuery, queryText);
 
   return (
     <Card
