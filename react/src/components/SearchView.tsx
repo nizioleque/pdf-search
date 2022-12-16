@@ -1,5 +1,5 @@
 import { Search } from '@mui/icons-material';
-import { Box, InputAdornment, TextField } from '@mui/material';
+import { Box, Card, InputAdornment, TextField } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useGetDocumentsQuery, useLazyGetWordQuery } from '../api';
 import SearchResultCard from './SearchResultCard';
@@ -18,32 +18,55 @@ function SearchView() {
   return (
     <Box
       sx={{
-        margin: '0 auto',
+        overflow: 'auto',
+        width: '100%',
       }}
     >
-      <TextField
+      <Box
         sx={{
-          width: 500,
+          margin: '0 auto',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          p: 2,
         }}
-        onChange={(event) => setSearchQuery(event.target.value)}
-        placeholder='Search'
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position='start'>
-              <Search />
-            </InputAdornment>
-          ),
-        }}
-      />
-      {searchResults &&
-        documents &&
-        showResult &&
-        searchResults.map((searchResult) => (
-          <SearchResultCard
-            searchResult={searchResult}
-            searchQuery={searchQuery}
+      >
+        <Card sx={{ width: 500 }} elevation={3}>
+          <TextField
+            inputProps={{ sx: { border: 'none' } }}
+            sx={{
+              '& fieldset': { border: 'none' },
+            }}
+            fullWidth
+            onChange={(event) => setSearchQuery(event.target.value)}
+            placeholder='Search'
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position='start'>
+                  <Search />
+                </InputAdornment>
+              ),
+            }}
           />
-        ))}
+        </Card>
+        {searchResults && documents && showResult && (
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              mt: 4,
+              gap: 2,
+            }}
+          >
+            {searchResults.map((searchResult) => (
+              <SearchResultCard
+                searchResult={searchResult}
+                searchQuery={searchQuery}
+              />
+            ))}
+          </Box>
+        )}
+      </Box>
     </Box>
   );
 }

@@ -18,7 +18,7 @@ function DocumentView() {
         overflow: 'auto',
       }}
       square
-      elevation={8}
+      elevation={5}
     >
       <Typography
         sx={(theme) => ({
