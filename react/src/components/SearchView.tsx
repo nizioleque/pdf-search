@@ -1,5 +1,5 @@
 import { Search } from '@mui/icons-material';
-import { Box, Card, InputAdornment, TextField } from '@mui/material';
+import { Alert, Box, Card, InputAdornment, TextField } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useGetDocumentsQuery, useLazyGetWordQuery } from '../api';
 import useDebounce from '../useDebounce';
@@ -51,23 +51,35 @@ function SearchView() {
             }}
           />
         </Card>
-        {searchResults && documents && showResult && (
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              mt: 4,
-              gap: 2,
-            }}
-          >
-            {searchResults.map((searchResult) => (
-              <SearchResultCard
-                searchResult={searchResult}
-                searchQuery={searchQuery}
-              />
-            ))}
-          </Box>
-        )}
+        {searchResults &&
+          documents &&
+          showResult &&
+          (searchResults.length === 0 ? (
+            <Alert
+              sx={{
+                mt: 4,
+              }}
+              severity='info'
+            >
+              No results
+            </Alert>
+          ) : (
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                mt: 4,
+                gap: 2,
+              }}
+            >
+              {searchResults.map((searchResult) => (
+                <SearchResultCard
+                  searchResult={searchResult}
+                  searchQuery={searchQuery}
+                />
+              ))}
+            </Box>
+          ))}
       </Box>
     </Box>
   );
