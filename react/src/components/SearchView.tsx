@@ -35,6 +35,7 @@ function SearchView() {
       >
         <Card sx={{ width: 500 }} elevation={3}>
           <TextField
+            autoComplete='off'
             inputProps={{ sx: { border: 'none' } }}
             sx={{
               '& fieldset': { border: 'none' },
