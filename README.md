@@ -1,5 +1,7 @@
 # PDF Inverse Search
 
+![localhost_3000_](https://user-images.githubusercontent.com/92390086/208552023-a13231d2-7f04-4e04-9147-7b07b3112314.png)
+
 University project at Warsaw University of Technology.
 
 The application scans PDF files, creates an inverted index in a MongoDB database and lets the users search the files using the index.
