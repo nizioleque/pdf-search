@@ -11,7 +11,9 @@ function SearchResultCard({ searchResult, searchQuery }: SearchResultProps) {
   const { data: documents } = useGetDocumentsQuery();
   const thisDocument = documents?.filter(
     (document) => document.id === searchResult.documentId
-  )[0]!;
+  )[0];
+
+  if (!thisDocument) return null;
 
   const queryText = searchQuery.trim().split(' ').slice(0, -1).join(' ');
 
