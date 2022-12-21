@@ -71,7 +71,7 @@ public class IndexService {
   }
 
   private void analyzePage(String documentId, String pageContent, int pageNumber, Map<String, Map<Integer, List<Integer>>> documentIndex) {
-    String[] words = pageContent.split(" ");
+    String[] words = pageContent.split("[^\\p{IsAlphabetic}\\p{IsDigit}]");
     int wordIndex = 0;
     for (String word : words) {
       String parsedWord = Word.parse(word);

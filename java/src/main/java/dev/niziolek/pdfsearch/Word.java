@@ -23,7 +23,6 @@ public class Word {
   }
 
   static String parse(String word) {
-    word = word.replaceAll("[^\\p{IsAlphabetic}\\p{IsDigit}]", "");
     if (word.equals("")) return null;
     return word.toLowerCase();
   }
