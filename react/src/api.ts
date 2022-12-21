@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { Document, SearchResult } from './types';
 
 export const api = createApi({
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:8080/api/' }),
+  baseQuery: fetchBaseQuery({ baseUrl: 'api/' }),
   tagTypes: ['documents'],
   endpoints: (builder) => ({
     getDocuments: builder.query<Document[], void>({
