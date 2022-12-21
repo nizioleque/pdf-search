@@ -26,7 +26,7 @@ public class WordRepositoryImpl implements CustomWordRepository {
       // add a word entry if it does not exist
       Query queryWord = new Query().addCriteria(Criteria.where("word").is(word));
       if (!mongoTemplate.exists(queryWord, Word.class)) {
-        mongoTemplate.save(new Word(word));
+        bulkOps.insert(new Word(word));
       }
 
       // add occurrences
